@@ -4,10 +4,13 @@
 
 #include "CoreMinimal.h"
 #include "GameFramework/Character.h"
+#include "InputActionValue.h"
 #include "SCharacter.generated.h"
 
 class UCameraComponent;
 class USpringArmComponent;
+class UInputMappingContext;
+class UInputAction;
 
 UCLASS()
 class ACTIONROGUELIKE_API ASCharacter : public ACharacter
@@ -19,14 +22,29 @@ public:
 	ASCharacter();
 
 protected:
+	// Called when the game starts or when spawned
+	virtual void BeginPlay() override;
+
+	// Move the character forwards and backwards.
+	void Move(const FInputActionValue& Value);
+
+	// Turn the character left or right.
+	void Look(const FInputActionValue& Value);
+
 	UPROPERTY(VisibleAnywhere)
 	USpringArmComponent* SpringArmComp;
 
 	UPROPERTY(VisibleAnywhere)
 	UCameraComponent* CameraComp;
 
-	// Called when the game starts or when spawned
-	virtual void BeginPlay() override;
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Input)
+	UInputMappingContext* SCharacterMappingContext;
+
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Input)
+	UInputAction* MoveAction;
+
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Input)
+	UInputAction* LookAction;
 
 public:
 	// Called every frame

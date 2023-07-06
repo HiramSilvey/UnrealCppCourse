@@ -2,6 +2,9 @@
 
 #include "SCharacter.h"
 #include "Camera/CameraComponent.h"
+#include "Components/InputComponent.h"
+#include "EnhancedInputComponent.h"
+#include "EnhancedInputSubsystems.h"
 #include "GameFramework/SpringArmComponent.h"
 
 // Sets default values
@@ -21,6 +24,27 @@ ASCharacter::ASCharacter()
 void ASCharacter::BeginPlay()
 {
 	Super::BeginPlay();
+
+	if (APlayerController* PlayerController = Cast<APlayerController>(GetController()))
+	{
+		if (UEnhancedInputLocalPlayerSubsystem* Subsystem = ULocalPlayer::GetSubsystem<UEnhancedInputLocalPlayerSubsystem>(PlayerController->GetLocalPlayer()))
+		{
+			Subsystem->AddMappingContext(SCharacterMappingContext, 0);
+		}
+	}
+}
+
+void ASCharacter::Move(const FInputActionValue& Value)
+{
+	AddMovementInput(GetActorForwardVector(), Value.Get<float>());
+}
+
+void ASCharacter::Look(const FInputActionValue& Value)
+{
+	if (GetController())
+	{
+		AddControllerYawInput(Value.Get<float>());
+	}
 }
 
 // Called every frame
@@ -33,4 +57,10 @@ void ASCharacter::Tick(float DeltaTime)
 void ASCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent)
 {
 	Super::SetupPlayerInputComponent(PlayerInputComponent);
+
+	if (UEnhancedInputComponent* EnhancedInputComponent = CastChecked<UEnhancedInputComponent>(PlayerInputComponent))
+	{
+		EnhancedInputComponent->BindAction(MoveAction, ETriggerEvent::Triggered, this, &ASCharacter::Move);
+		EnhancedInputComponent->BindAction(LookAction, ETriggerEvent::Triggered, this, &ASCharacter::Look);
+	}
 }

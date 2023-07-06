@@ -75,3 +75,6 @@ DerivedDataCache/*
 
 # VSCode configurations
 .vscode/
+
+# Generated Platform files (i.e. HoloLens)
+Platforms/
