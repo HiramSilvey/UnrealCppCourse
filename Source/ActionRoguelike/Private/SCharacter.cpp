@@ -5,6 +5,7 @@
 #include "Components/InputComponent.h"
 #include "EnhancedInputComponent.h"
 #include "EnhancedInputSubsystems.h"
+#include "GameFramework/CharacterMovementComponent.h"
 #include "GameFramework/SpringArmComponent.h"
 
 // Sets default values
@@ -13,11 +14,16 @@ ASCharacter::ASCharacter()
 	// Set this character to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
 	PrimaryActorTick.bCanEverTick = true;
 
+	bUseControllerRotationYaw = false;
+
 	SpringArmComp = CreateDefaultSubobject<USpringArmComponent>("SpringArmComp");
 	SpringArmComp->SetupAttachment(RootComponent);
+	SpringArmComp->bUsePawnControlRotation = true;
 
 	CameraComp = CreateDefaultSubobject<UCameraComponent>("CameraComp");
 	CameraComp->SetupAttachment(SpringArmComp);
+
+	GetCharacterMovement()->bOrientRotationToMovement = true;
 }
 
 // Called when the game starts or when spawned
@@ -36,14 +42,18 @@ void ASCharacter::BeginPlay()
 
 void ASCharacter::Move(const FInputActionValue& Value)
 {
-	AddMovementInput(GetActorForwardVector(), Value.Get<float>());
+	const FVector2D MoveAxisValue = Value.Get<FVector2D>();
+	AddMovementInput(GetActorRightVector(), MoveAxisValue.X);
+	AddMovementInput(GetActorForwardVector(), MoveAxisValue.Y);
 }
 
 void ASCharacter::Look(const FInputActionValue& Value)
 {
 	if (GetController())
 	{
-		AddControllerYawInput(Value.Get<float>());
+		const FVector2D LookAxisValue = Value.Get<FVector2D>();
+		AddControllerYawInput(LookAxisValue.X);
+		AddControllerPitchInput(LookAxisValue.Y);
 	}
 }
 

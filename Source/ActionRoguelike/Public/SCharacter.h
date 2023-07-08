@@ -25,10 +25,10 @@ protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
 
-	// Move the character forwards and backwards.
+	// Move the character forward, backward, left or right.
 	void Move(const FInputActionValue& Value);
 
-	// Turn the character left or right.
+	// Look left, right, up or down.
 	void Look(const FInputActionValue& Value);
 
 	UPROPERTY(VisibleAnywhere)
