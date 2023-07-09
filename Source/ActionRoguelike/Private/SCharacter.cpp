@@ -17,8 +17,8 @@ ASCharacter::ASCharacter()
 	bUseControllerRotationYaw = false;
 
 	SpringArmComp = CreateDefaultSubobject<USpringArmComponent>("SpringArmComp");
-	SpringArmComp->SetupAttachment(RootComponent);
 	SpringArmComp->bUsePawnControlRotation = true;
+	SpringArmComp->SetupAttachment(RootComponent);
 
 	CameraComp = CreateDefaultSubobject<UCameraComponent>("CameraComp");
 	CameraComp->SetupAttachment(SpringArmComp);
@@ -43,8 +43,12 @@ void ASCharacter::BeginPlay()
 void ASCharacter::Move(const FInputActionValue& Value)
 {
 	const FVector2D MoveAxisValue = Value.Get<FVector2D>();
-	AddMovementInput(GetActorRightVector(), MoveAxisValue.X);
-	AddMovementInput(GetActorForwardVector(), MoveAxisValue.Y);
+	FRotator ControlRotation = GetControlRotation();
+	ControlRotation.Pitch = 0.0f;
+	ControlRotation.Roll = 0.0f;
+
+	AddMovementInput(FRotationMatrix(ControlRotation).GetScaledAxis(EAxis::Y), MoveAxisValue.X);
+	AddMovementInput(ControlRotation.Vector(), MoveAxisValue.Y);
 }
 
 void ASCharacter::Look(const FInputActionValue& Value)
@@ -55,6 +59,15 @@ void ASCharacter::Look(const FInputActionValue& Value)
 		AddControllerYawInput(LookAxisValue.X);
 		AddControllerPitchInput(LookAxisValue.Y);
 	}
+}
+
+void ASCharacter::PrimaryAttack()
+{
+	const FVector HandLocation = GetMesh()->GetSocketLocation("Muzzle_01");
+	const FTransform SpawnTM = FTransform(GetControlRotation(), HandLocation);
+	FActorSpawnParameters SpawnParams;
+	SpawnParams.SpawnCollisionHandlingOverride = ESpawnActorCollisionHandlingMethod::AlwaysSpawn;
+	GetWorld()->SpawnActor<AActor>(ProjectileClass, SpawnTM, SpawnParams);
 }
 
 // Called every frame
@@ -72,5 +85,6 @@ void ASCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputComponen
 	{
 		EnhancedInputComponent->BindAction(MoveAction, ETriggerEvent::Triggered, this, &ASCharacter::Move);
 		EnhancedInputComponent->BindAction(LookAction, ETriggerEvent::Triggered, this, &ASCharacter::Look);
+		EnhancedInputComponent->BindAction(PrimaryAttackAction, ETriggerEvent::Triggered, this, &ASCharacter::PrimaryAttack);
 	}
 }

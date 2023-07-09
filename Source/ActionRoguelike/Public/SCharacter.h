@@ -17,6 +17,10 @@ class ACTIONROGUELIKE_API ASCharacter : public ACharacter
 {
 	GENERATED_BODY()
 
+protected:
+	UPROPERTY(EditAnywhere)
+	TSubclassOf<AActor> ProjectileClass;
+
 public:
 	// Sets default values for this character's properties
 	ASCharacter();
@@ -30,6 +34,9 @@ protected:
 
 	// Look left, right, up or down.
 	void Look(const FInputActionValue& Value);
+
+	// Spawn and shoot an `SMagicProjectile` forward.
+	void PrimaryAttack();
 
 	UPROPERTY(VisibleAnywhere)
 	USpringArmComponent* SpringArmComp;
@@ -45,6 +52,9 @@ protected:
 
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Input)
 	UInputAction* LookAction;
+
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Input)
+	UInputAction* PrimaryAttackAction;
 
 public:
 	// Called every frame
