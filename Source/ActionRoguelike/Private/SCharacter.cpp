@@ -61,6 +61,14 @@ void ASCharacter::Look(const FInputActionValue& Value)
 	}
 }
 
+void ASCharacter::Jump(const FInputActionValue& Value)
+{
+	if (Value.Get<bool>())
+	{
+		Super::Jump();
+	}
+}
+
 void ASCharacter::PrimaryAttack()
 {
 	const FVector HandLocation = GetMesh()->GetSocketLocation("Muzzle_01");
@@ -85,6 +93,7 @@ void ASCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputComponen
 	{
 		EnhancedInputComponent->BindAction(MoveAction, ETriggerEvent::Triggered, this, &ASCharacter::Move);
 		EnhancedInputComponent->BindAction(LookAction, ETriggerEvent::Triggered, this, &ASCharacter::Look);
+		EnhancedInputComponent->BindAction(JumpAction, ETriggerEvent::Triggered, this, &ASCharacter::Jump);
 		EnhancedInputComponent->BindAction(PrimaryAttackAction, ETriggerEvent::Triggered, this, &ASCharacter::PrimaryAttack);
 	}
 }

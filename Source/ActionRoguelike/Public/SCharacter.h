@@ -35,6 +35,9 @@ protected:
 	// Look left, right, up or down.
 	void Look(const FInputActionValue& Value);
 
+	// Jump using the built-in character jump function.
+	void Jump(const FInputActionValue& Value);
+
 	// Spawn and shoot an `SMagicProjectile` forward.
 	void PrimaryAttack();
 
@@ -52,6 +55,9 @@ protected:
 
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Input)
 	UInputAction* LookAction;
+
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Input)
+	UInputAction* JumpAction;
 
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Input)
 	UInputAction* PrimaryAttackAction;
