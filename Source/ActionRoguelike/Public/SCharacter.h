@@ -7,10 +7,12 @@
 #include "InputActionValue.h"
 #include "SCharacter.generated.h"
 
+class UAnimMontage;
 class UCameraComponent;
-class USpringArmComponent;
-class UInputMappingContext;
 class UInputAction;
+class UInputMappingContext;
+class USInteractionComponent;
+class USpringArmComponent;
 
 UCLASS()
 class ACTIONROGUELIKE_API ASCharacter : public ACharacter
@@ -18,8 +20,13 @@ class ACTIONROGUELIKE_API ASCharacter : public ACharacter
 	GENERATED_BODY()
 
 protected:
-	UPROPERTY(EditAnywhere)
+	UPROPERTY(EditAnywhere, Category = "Attack")
 	TSubclassOf<AActor> ProjectileClass;
+
+	UPROPERTY(EditAnywhere, Category = "Attack")
+	UAnimMontage* AttackAnim;
+
+	FTimerHandle TimerHandle_PrimaryAttack;
 
 public:
 	// Sets default values for this character's properties
@@ -38,14 +45,21 @@ protected:
 	// Jump using the built-in character jump function.
 	void Jump(const FInputActionValue& Value);
 
+	void PrimaryAttack_TimeElapsed();
+
 	// Spawn and shoot an `SMagicProjectile` forward.
 	void PrimaryAttack();
+
+	void PrimaryInteract();
 
 	UPROPERTY(VisibleAnywhere)
 	USpringArmComponent* SpringArmComp;
 
 	UPROPERTY(VisibleAnywhere)
 	UCameraComponent* CameraComp;
+
+	UPROPERTY(VisibleAnywhere)
+	USInteractionComponent* InteractionComp;
 
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Input)
 	UInputMappingContext* SCharacterMappingContext;
@@ -61,6 +75,9 @@ protected:
 
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Input)
 	UInputAction* PrimaryAttackAction;
+
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Input)
+	UInputAction* PrimaryInteractAction;
 
 public:
 	// Called every frame
