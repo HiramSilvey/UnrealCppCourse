@@ -78,3 +78,6 @@ DerivedDataCache/*
 
 # Generated Platform files (i.e. HoloLens)
 Platforms/
+
+# Clang compile commands for non-VSCode editor support
+compile_commands.json
