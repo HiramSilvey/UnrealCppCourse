@@ -41,6 +41,11 @@ void ASExplosiveBarrel::OnHit(UPrimitiveComponent* HitComponent, AActor* OtherAc
 	ForceComp->FireImpulse();
 }
 
+void ASExplosiveBarrel::Explode()
+{
+	ForceComp->FireImpulse();
+}
+
 // Called every frame
 void ASExplosiveBarrel::Tick(float DeltaTime)
 {
