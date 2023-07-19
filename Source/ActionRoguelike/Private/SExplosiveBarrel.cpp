@@ -16,6 +16,8 @@ ASExplosiveBarrel::ASExplosiveBarrel()
 	RootComponent = MeshComp;
 
 	ForceComp = CreateDefaultSubobject<URadialForceComponent>("ForceComp");
+	ForceComp->SetAutoActivate(false);
+	ForceComp->AddCollisionChannelToAffect(ECC_WorldDynamic);
 	ForceComp->Radius = 750.0f;
 	ForceComp->ImpulseStrength = 2500.0f;
 	ForceComp->bImpulseVelChange = true;
