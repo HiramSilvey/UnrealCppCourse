@@ -41,6 +41,11 @@ void ASExplosiveBarrel::BeginPlay()
 void ASExplosiveBarrel::OnHit(UPrimitiveComponent* HitComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp, FVector NormalImpulse, const FHitResult& Hit)
 {
 	ForceComp->FireImpulse();
+
+	UE_LOG(LogTemp, Log, TEXT("OnHit in Explosive Barrel"));
+	UE_LOG(LogTemp, Warning, TEXT("OnHit OtherActor: %s, at game time %f"), *GetNameSafe(OtherActor), GetWorld()->TimeSeconds);
+
+	DrawDebugString(GetWorld(), Hit.ImpactPoint, FString::Printf(TEXT("Hit at location: %s"), *Hit.ImpactPoint.ToString()), nullptr, FColor::Green, 2.0f, true);
 }
 
 void ASExplosiveBarrel::Explode()
