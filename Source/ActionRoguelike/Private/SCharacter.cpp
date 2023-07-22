@@ -7,6 +7,7 @@
 #include "EnhancedInputSubsystems.h"
 #include "GameFramework/CharacterMovementComponent.h"
 #include "GameFramework/SpringArmComponent.h"
+#include "Kismet/KismetMathLibrary.h"
 #include "SInteractionComponent.h"
 
 // Sets default values
@@ -77,8 +78,31 @@ void ASCharacter::Jump(const FInputActionValue& Value)
 
 void ASCharacter::PrimaryAttack_TimeElapsed()
 {
+	const FVector CameraLocation = CameraComp->GetComponentLocation();
+	const FRotator CameraRotation = CameraComp->GetComponentRotation();
+	const FVector End = CameraLocation + (CameraRotation.Vector() * 2000);
+	DrawDebugLine(GetWorld(), CameraLocation, End, FColor::Red, false, 2.0f, 0, 2.0f);
+
+	FCollisionObjectQueryParams ObjectQueryParams;
+	ObjectQueryParams.AddObjectTypesToQuery(ECC_WorldDynamic);
+	ObjectQueryParams.AddObjectTypesToQuery(ECC_WorldStatic);
+	ObjectQueryParams.AddObjectTypesToQuery(ECC_PhysicsBody);
+
+	FHitResult Target;
+	const bool bBlockingHit = GetWorld()->LineTraceSingleByObjectType(Target, CameraLocation, End, ObjectQueryParams);
+	const FVector TargetLocation = bBlockingHit ? Target.ImpactPoint : End;
+
 	const FVector HandLocation = GetMesh()->GetSocketLocation("Muzzle_01");
-	const FTransform SpawnTM = FTransform(GetControlRotation(), HandLocation);
+
+	DrawDebugLine(GetWorld(), HandLocation, TargetLocation, FColor::Green, false, 2.0f, 0, 2.0f);
+	UE_LOG(LogTemp, Log, TEXT("Object hit? %d"), bBlockingHit);
+	if (bBlockingHit)
+	{
+		UE_LOG(LogTemp, Log, TEXT("Object = %s"), *Target.GetComponent()->GetName());
+	}
+
+	const FRotator AimRotation = UKismetMathLibrary::FindLookAtRotation(HandLocation, TargetLocation);
+	const FTransform SpawnTM = FTransform(AimRotation, HandLocation);
 	FActorSpawnParameters SpawnParams;
 	SpawnParams.SpawnCollisionHandlingOverride = ESpawnActorCollisionHandlingMethod::AlwaysSpawn;
 	SpawnParams.Instigator = this;
