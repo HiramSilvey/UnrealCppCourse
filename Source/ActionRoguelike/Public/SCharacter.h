@@ -21,12 +21,15 @@ class ACTIONROGUELIKE_API ASCharacter : public ACharacter
 
 protected:
 	UPROPERTY(EditAnywhere, Category = "Attack")
-	TSubclassOf<AActor> ProjectileClass;
+	TSubclassOf<AActor> PrimaryProjectileClass;
+
+	UPROPERTY(EditAnywhere, Category = "Attack")
+	TSubclassOf<AActor> UltimateProjectileClass;
 
 	UPROPERTY(EditAnywhere, Category = "Attack")
 	UAnimMontage* AttackAnim;
 
-	FTimerHandle TimerHandle_PrimaryAttack;
+	FTimerHandle TimerHandle_Attack;
 
 public:
 	// Sets default values for this character's properties
@@ -45,10 +48,18 @@ protected:
 	// Jump using the built-in character jump function.
 	void Jump(const FInputActionValue& Value);
 
+	void Attack_TimeElapsed(TSubclassOf<AActor> ProjectileClass);
+
+	void Attack(typename FTimerDelegate::TMethodPtr<ASCharacter> InTimerMethod);
+
 	void PrimaryAttack_TimeElapsed();
 
 	// Spawn and shoot an `SMagicProjectile` forward.
 	void PrimaryAttack();
+
+	void UltimateAttack_TimeElapsed();
+
+	void UltimateAttack();
 
 	void PrimaryInteract();
 
@@ -75,6 +86,9 @@ protected:
 
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Input)
 	UInputAction* PrimaryAttackAction;
+
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Input)
+	UInputAction* UltimateAttackAction;
 
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Input)
 	UInputAction* PrimaryInteractAction;

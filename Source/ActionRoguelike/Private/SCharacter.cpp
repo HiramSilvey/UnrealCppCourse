@@ -76,7 +76,7 @@ void ASCharacter::Jump(const FInputActionValue& Value)
 	}
 }
 
-void ASCharacter::PrimaryAttack_TimeElapsed()
+void ASCharacter::Attack_TimeElapsed(TSubclassOf<AActor> ProjectileClass)
 {
 	const FVector CameraLocation = CameraComp->GetComponentLocation();
 	const FRotator CameraRotation = CameraComp->GetComponentRotation();
@@ -109,10 +109,31 @@ void ASCharacter::PrimaryAttack_TimeElapsed()
 	GetWorld()->SpawnActor<AActor>(ProjectileClass, SpawnTM, SpawnParams);
 }
 
-void ASCharacter::PrimaryAttack()
+void ASCharacter::Attack(typename FTimerDelegate::TMethodPtr<ASCharacter> InTimerMethod)
 {
 	PlayAnimMontage(AttackAnim);
-	GetWorldTimerManager().SetTimer(TimerHandle_PrimaryAttack, this, &ASCharacter::PrimaryAttack_TimeElapsed, 0.2f);
+	GetWorldTimerManager().SetTimer(
+		TimerHandle_Attack, this, InTimerMethod, 0.2f);
+}
+
+void ASCharacter::PrimaryAttack_TimeElapsed()
+{
+	Attack_TimeElapsed(PrimaryProjectileClass);
+}
+
+void ASCharacter::PrimaryAttack()
+{
+	Attack(&ASCharacter::PrimaryAttack_TimeElapsed);
+}
+
+void ASCharacter::UltimateAttack_TimeElapsed()
+{
+	Attack_TimeElapsed(UltimateProjectileClass);
+}
+
+void ASCharacter::UltimateAttack()
+{
+	Attack(&ASCharacter::UltimateAttack_TimeElapsed);
 }
 
 void ASCharacter::PrimaryInteract()
@@ -140,6 +161,7 @@ void ASCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputComponen
 		EnhancedInputComponent->BindAction(LookAction, ETriggerEvent::Triggered, this, &ASCharacter::Look);
 		EnhancedInputComponent->BindAction(JumpAction, ETriggerEvent::Triggered, this, &ASCharacter::Jump);
 		EnhancedInputComponent->BindAction(PrimaryAttackAction, ETriggerEvent::Started, this, &ASCharacter::PrimaryAttack);
+		EnhancedInputComponent->BindAction(UltimateAttackAction, ETriggerEvent::Started, this, &ASCharacter::UltimateAttack);
 		EnhancedInputComponent->BindAction(PrimaryInteractAction, ETriggerEvent::Started, this, &ASCharacter::PrimaryInteract);
 	}
 }
