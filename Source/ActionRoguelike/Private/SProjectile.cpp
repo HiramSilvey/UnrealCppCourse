@@ -27,6 +27,8 @@ ASProjectile::ASProjectile()
 void ASProjectile::BeginPlay()
 {
 	Super::BeginPlay();
+
+	SphereComp->IgnoreActorWhenMoving(this->GetInstigator(), true);
 }
 
 // Called every frame
