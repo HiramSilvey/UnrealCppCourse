@@ -24,6 +24,9 @@ protected:
 	TSubclassOf<AActor> PrimaryProjectileClass;
 
 	UPROPERTY(EditAnywhere, Category = "Attack")
+	TSubclassOf<AActor> DashProjectileClass;
+
+	UPROPERTY(EditAnywhere, Category = "Attack")
 	TSubclassOf<AActor> UltimateProjectileClass;
 
 	UPROPERTY(EditAnywhere, Category = "Attack")
@@ -57,6 +60,10 @@ protected:
 	// Spawn and shoot an `SMagicProjectile` forward.
 	void PrimaryAttack();
 
+	void DashAttack_TimeElapsed();
+
+	void DashAttack();
+
 	void UltimateAttack_TimeElapsed();
 
 	void UltimateAttack();
@@ -86,6 +93,9 @@ protected:
 
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Input)
 	UInputAction* PrimaryAttackAction;
+
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Input)
+	UInputAction* DashAttackAction;
 
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Input)
 	UInputAction* UltimateAttackAction;

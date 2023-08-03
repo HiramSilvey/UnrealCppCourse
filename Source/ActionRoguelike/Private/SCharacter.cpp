@@ -126,6 +126,16 @@ void ASCharacter::PrimaryAttack()
 	Attack(&ASCharacter::PrimaryAttack_TimeElapsed);
 }
 
+void ASCharacter::DashAttack_TimeElapsed()
+{
+	Attack_TimeElapsed(DashProjectileClass);
+}
+
+void ASCharacter::DashAttack()
+{
+	Attack(&ASCharacter::DashAttack_TimeElapsed);
+}
+
 void ASCharacter::UltimateAttack_TimeElapsed()
 {
 	Attack_TimeElapsed(UltimateProjectileClass);
@@ -161,6 +171,7 @@ void ASCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputComponen
 		EnhancedInputComponent->BindAction(LookAction, ETriggerEvent::Triggered, this, &ASCharacter::Look);
 		EnhancedInputComponent->BindAction(JumpAction, ETriggerEvent::Triggered, this, &ASCharacter::Jump);
 		EnhancedInputComponent->BindAction(PrimaryAttackAction, ETriggerEvent::Started, this, &ASCharacter::PrimaryAttack);
+		EnhancedInputComponent->BindAction(DashAttackAction, ETriggerEvent::Started, this, &ASCharacter::DashAttack);
 		EnhancedInputComponent->BindAction(UltimateAttackAction, ETriggerEvent::Started, this, &ASCharacter::UltimateAttack);
 		EnhancedInputComponent->BindAction(PrimaryInteractAction, ETriggerEvent::Started, this, &ASCharacter::PrimaryInteract);
 	}
