@@ -19,8 +19,11 @@ public:
 	ASDashProjectile();
 
 protected:
-	UPROPERTY(EditAnywhere)
-	UParticleSystem* ParticleSystem;
+	UPROPERTY(EditDefaultsOnly, Category = "Teleport")
+	float TeleportDelay;
+
+	UPROPERTY(EditDefaultsOnly, Category = "Teleport")
+	float DetonateDelay;
 
 	FTimerHandle TimerHandle;
 
@@ -31,8 +34,7 @@ protected:
 
 	void Activate();
 
-	UFUNCTION()
-	void OnHit(UPrimitiveComponent* HitComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp, FVector NormalImpulse, const FHitResult& Hit);
+	virtual void Explode_Implementation() override;
 
 public:
 	// Called every frame

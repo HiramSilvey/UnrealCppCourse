@@ -83,7 +83,7 @@ void ASCharacter::Attack_TimeElapsed(TSubclassOf<AActor> ProjectileClass)
 {
 	const FVector CameraLocation = CameraComp->GetComponentLocation();
 	const FRotator CameraRotation = CameraComp->GetComponentRotation();
-	const FVector End = CameraLocation + (CameraRotation.Vector() * 2000);
+	const FVector End = CameraLocation + (CameraRotation.Vector() * 5000);
 	DrawDebugLine(GetWorld(), CameraLocation, End, FColor::Red, false, 2.0f, 0, 2.0f);
 
 	FCollisionObjectQueryParams ObjectQueryParams;
