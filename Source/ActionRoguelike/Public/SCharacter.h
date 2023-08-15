@@ -40,8 +40,13 @@ public:
 	ASCharacter();
 
 protected:
+	virtual void PostInitializeComponents() override;
+
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
+
+	UFUNCTION()
+	void OnHealthChanged(AActor* InstigatorActor, USAttributeComponent* OwningComp, float NewHealth, float Delta);
 
 	// Move the character forward, backward, left or right.
 	void Move(const FInputActionValue& Value);

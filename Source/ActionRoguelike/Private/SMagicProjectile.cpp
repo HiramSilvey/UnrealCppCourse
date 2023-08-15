@@ -7,6 +7,7 @@
 
 // Sets default values
 ASMagicProjectile::ASMagicProjectile()
+	: HealthDelta(-20.0f)
 {
 	SphereComp->OnComponentBeginOverlap.AddDynamic(this, &ASMagicProjectile::OnActorOverlap);
 }
@@ -17,7 +18,7 @@ void ASMagicProjectile::OnActorOverlap(UPrimitiveComponent* OverlappedComponent,
 	{
 		if (USAttributeComponent* AttributeComp = Cast<USAttributeComponent>(OtherActor->GetComponentByClass(USAttributeComponent::StaticClass())); AttributeComp != nullptr)
 		{
-			AttributeComp->ApplyHealthChange(-20.0f);
+			AttributeComp->ApplyHealthChange(HealthDelta);
 			Destroy();
 		}
 	}
