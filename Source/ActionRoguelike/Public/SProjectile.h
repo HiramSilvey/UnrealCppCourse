@@ -6,6 +6,8 @@
 #include "GameFramework/Actor.h"
 #include "SProjectile.generated.h"
 
+class UAudioComponent;
+class USoundBase;
 class USphereComponent;
 class UProjectileMovementComponent;
 class UParticleSystemComponent;
@@ -29,6 +31,15 @@ protected:
 	UPROPERTY(EditDefaultsOnly, Category = "Effects")
 	UParticleSystem* ImpactVFX;
 
+	UPROPERTY(EditDefaultsOnly, Category = "Audio")
+	USoundBase* LoopSound;
+
+	UPROPERTY(EditDefaultsOnly, Category = "Audio")
+	USoundBase* ImpactSound;
+
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Components")
+	UAudioComponent* AudioComp;
+
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Components")
 	USphereComponent* SphereComp;
 
@@ -37,6 +48,8 @@ protected:
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Components")
 	UParticleSystemComponent* EffectComp;
+
+	virtual void PostInitializeComponents() override;
 
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;

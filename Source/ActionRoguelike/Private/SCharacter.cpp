@@ -3,6 +3,7 @@
 #include "SCharacter.h"
 #include "Camera/CameraComponent.h"
 #include "Components/InputComponent.h"
+#include "Components/SkeletalMeshComponent.h"
 #include "EnhancedInputComponent.h"
 #include "EnhancedInputSubsystems.h"
 #include "GameFramework/CharacterMovementComponent.h"
@@ -59,10 +60,16 @@ void ASCharacter::BeginPlay()
 
 void ASCharacter::OnHealthChanged(AActor* InstigatorActor, USAttributeComponent* OwningComp, float NewHealth, float Delta)
 {
-	if (NewHealth <= 0.0f && Delta < 0.0f)
+	// Damage
+	if (Delta < 0.0f)
 	{
-		APlayerController* PC = Cast<APlayerController>(GetController());
-		DisableInput(PC);
+		GetMesh()->SetScalarParameterValueOnMaterials("TimeToHit", GetWorld()->TimeSeconds);
+
+		if (NewHealth <= 0.0f)
+		{
+			APlayerController* PC = Cast<APlayerController>(GetController());
+			DisableInput(PC);
+		}
 	}
 }
 

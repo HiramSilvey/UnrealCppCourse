@@ -43,6 +43,7 @@ void ASDashProjectile::Activate()
 	EffectComp->DeactivateSystem();
 	SetActorEnableCollision(false);
 	UGameplayStatics::SpawnEmitterAtLocation(this, ImpactVFX, GetActorLocation(), GetActorRotation());
+	UGameplayStatics::PlaySoundAtLocation(this, ImpactSound, GetActorLocation());
 	GetWorldTimerManager()
 		.SetTimer(TimerHandle, this, &ASDashProjectile::TeleportAndDestroy, TeleportDelay);
 }

@@ -1,6 +1,7 @@
 // Fill out your copyright notice in the Description page of Project Settings.
 
 #include "SProjectile.h"
+#include "Components/AudioComponent.h"
 #include "Components/SphereComponent.h"
 #include "GameFramework/ProjectileMovementComponent.h"
 #include "Kismet/GameplayStatics.h"
@@ -16,6 +17,9 @@ ASProjectile::ASProjectile()
 	SphereComp->SetCollisionProfileName("Projectile");
 	SphereComp->OnComponentHit.AddDynamic(this, &ASProjectile::OnActorHit);
 	RootComponent = SphereComp;
+
+	AudioComp = CreateDefaultSubobject<UAudioComponent>("AudioComp");
+	AudioComp->SetupAttachment(SphereComp);
 
 	EffectComp = CreateDefaultSubobject<UParticleSystemComponent>("EffectComp");
 	EffectComp->SetupAttachment(SphereComp);
@@ -36,8 +40,16 @@ void ASProjectile::Explode_Implementation()
 	if (IsValid(this))
 	{
 		UGameplayStatics::SpawnEmitterAtLocation(this, ImpactVFX, GetActorLocation(), GetActorRotation());
+		UGameplayStatics::PlaySoundAtLocation(this, ImpactSound, GetActorLocation());
 		Destroy();
 	}
+}
+
+void ASProjectile::PostInitializeComponents()
+{
+	Super::PostInitializeComponents();
+
+	AudioComp->SetSound(LoopSound);
 }
 
 // Called when the game starts or when spawned
@@ -46,6 +58,7 @@ void ASProjectile::BeginPlay()
 	Super::BeginPlay();
 
 	SphereComp->IgnoreActorWhenMoving(this->GetInstigator(), true);
+	AudioComp->Play();
 }
 
 // Called every frame

@@ -1,6 +1,7 @@
 // Fill out your copyright notice in the Description page of Project Settings.
 
 #include "SMagicProjectile.h"
+#include "Components/AudioComponent.h"
 #include "Components/SphereComponent.h"
 #include "GameFramework/ProjectileMovementComponent.h"
 #include "SAttributeComponent.h"
@@ -19,7 +20,7 @@ void ASMagicProjectile::OnActorOverlap(UPrimitiveComponent* OverlappedComponent,
 		if (USAttributeComponent* AttributeComp = Cast<USAttributeComponent>(OtherActor->GetComponentByClass(USAttributeComponent::StaticClass())); AttributeComp != nullptr)
 		{
 			AttributeComp->ApplyHealthChange(HealthDelta);
-			Destroy();
+			Super::Explode();
 		}
 	}
 }
