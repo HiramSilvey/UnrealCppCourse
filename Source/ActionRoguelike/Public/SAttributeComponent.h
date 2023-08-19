@@ -21,7 +21,13 @@ protected:
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Attributes")
 	float Health;
 
-	// HealthMax, Stamina, Strength
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Attributes")
+	float HealthMin = 0.0f;
+
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Attributes")
+	float HealthMax = 100.0f;
+
+	// Stamina, Strength
 
 public:
 	UFUNCTION(BlueprintCallable)

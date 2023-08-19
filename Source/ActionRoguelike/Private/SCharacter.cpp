@@ -41,6 +41,8 @@ void ASCharacter::PostInitializeComponents()
 {
 	Super::PostInitializeComponents();
 
+	GetMesh()->SetScalarParameterValueOnMaterials("HitFlashSpeed", HitFlashSpeed);
+	GetMesh()->SetVectorParameterValueOnMaterials("HitFlashColor", HitFlashColor);
 	AttributeComp->OnHealthChanged.AddDynamic(this, &ASCharacter::OnHealthChanged);
 }
 
@@ -65,7 +67,7 @@ void ASCharacter::OnHealthChanged(AActor* InstigatorActor, USAttributeComponent*
 	{
 		GetMesh()->SetScalarParameterValueOnMaterials("TimeToHit", GetWorld()->TimeSeconds);
 
-		if (NewHealth <= 0.0f)
+		if (!AttributeComp->IsAlive())
 		{
 			APlayerController* PC = Cast<APlayerController>(GetController());
 			DisableInput(PC);
