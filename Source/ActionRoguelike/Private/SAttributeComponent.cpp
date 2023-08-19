@@ -8,6 +8,11 @@ USAttributeComponent::USAttributeComponent()
 	Health = HealthMax;
 }
 
+bool USAttributeComponent::IsMaxHealth() const
+{
+	return Health >= HealthMax;
+}
+
 bool USAttributeComponent::IsAlive() const
 {
 	return Health > 0.0f;
