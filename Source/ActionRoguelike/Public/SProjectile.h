@@ -7,6 +7,7 @@
 #include "SProjectile.generated.h"
 
 class UAudioComponent;
+class UCameraShakeBase;
 class USoundBase;
 class USphereComponent;
 class UProjectileMovementComponent;
@@ -31,11 +32,17 @@ protected:
 	UPROPERTY(EditDefaultsOnly, Category = "Effects")
 	UParticleSystem* ImpactVFX;
 
-	UPROPERTY(EditDefaultsOnly, Category = "Audio")
+	UPROPERTY(EditDefaultsOnly, Category = "Effects")
 	USoundBase* LoopSound;
 
-	UPROPERTY(EditDefaultsOnly, Category = "Audio")
+	UPROPERTY(EditDefaultsOnly, Category = "Effects")
 	USoundBase* ImpactSound;
+
+	UPROPERTY(EditDefaultsOnly, Category = "Effects")
+	TSubclassOf<UCameraShakeBase> CameraShake;
+
+	UPROPERTY(EditDefaultsOnly, Category = "Effects")
+	float CameraShakeRadius = 4000.0f;
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Components")
 	UAudioComponent* AudioComp;

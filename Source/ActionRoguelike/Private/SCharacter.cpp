@@ -8,6 +8,7 @@
 #include "EnhancedInputSubsystems.h"
 #include "GameFramework/CharacterMovementComponent.h"
 #include "GameFramework/SpringArmComponent.h"
+#include "Kismet/GameplayStatics.h"
 #include "Kismet/KismetMathLibrary.h"
 #include "SAttributeComponent.h"
 #include "SInteractionComponent.h"
@@ -120,7 +121,8 @@ void ASCharacter::Attack_TimeElapsed(TSubclassOf<AActor> ProjectileClass)
 	const bool bBlockingHit = GetWorld()->LineTraceSingleByObjectType(Target, CameraLocation, End, ObjectQueryParams);
 	const FVector TargetLocation = bBlockingHit ? Target.ImpactPoint : End;
 
-	const FVector HandLocation = GetMesh()->GetSocketLocation("Muzzle_01");
+	const FName HandSocketName = "Muzzle_01";
+	const FVector HandLocation = GetMesh()->GetSocketLocation(HandSocketName);
 
 	DrawDebugLine(GetWorld(), HandLocation, TargetLocation, FColor::Green, false, 2.0f, 0, 2.0f);
 	UE_LOG(LogTemp, Log, TEXT("Object hit? %d"), bBlockingHit);
@@ -135,6 +137,8 @@ void ASCharacter::Attack_TimeElapsed(TSubclassOf<AActor> ProjectileClass)
 	SpawnParams.SpawnCollisionHandlingOverride = ESpawnActorCollisionHandlingMethod::AlwaysSpawn;
 	SpawnParams.Instigator = this;
 	GetWorld()->SpawnActor<AActor>(ProjectileClass, SpawnTM, SpawnParams);
+
+	UGameplayStatics::SpawnEmitterAttached(CastVFX, GetMesh(), GetMesh()->GetSocketBoneName(HandSocketName), HandLocation, GetMesh()->GetSocketRotation(HandSocketName), EAttachLocation::KeepWorldPosition);
 }
 
 void ASCharacter::Attack(typename FTimerDelegate::TMethodPtr<ASCharacter> InTimerMethod)

@@ -27,6 +27,9 @@ protected:
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Effect")
 	FVector HitFlashColor;
 
+	UPROPERTY(EditDefaultsOnly, Category = "Effects")
+	UParticleSystem* CastVFX;
+
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Attack")
 	TSubclassOf<AActor> PrimaryProjectileClass;
 
