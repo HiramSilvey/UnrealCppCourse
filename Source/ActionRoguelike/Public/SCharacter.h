@@ -85,6 +85,9 @@ protected:
 
 	void PrimaryInteract();
 
+	UPROPERTY(VisibleAnywhere, Category = "Effect")
+	FName TimeToHitParamName;
+
 	UPROPERTY(VisibleAnywhere)
 	USpringArmComponent* SpringArmComp;
 

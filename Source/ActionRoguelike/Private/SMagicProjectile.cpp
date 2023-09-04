@@ -19,7 +19,7 @@ void ASMagicProjectile::OnActorOverlap(UPrimitiveComponent* OverlappedComponent,
 	{
 		if (USAttributeComponent* AttributeComp = Cast<USAttributeComponent>(OtherActor->GetComponentByClass(USAttributeComponent::StaticClass())); AttributeComp != nullptr)
 		{
-			AttributeComp->ApplyHealthChange(HealthDelta);
+			AttributeComp->ApplyHealthChange(GetInstigator(), HealthDelta);
 			Super::Explode();
 		}
 	}

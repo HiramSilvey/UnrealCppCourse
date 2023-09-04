@@ -21,6 +21,8 @@ ASCharacter::ASCharacter()
 
 	bUseControllerRotationYaw = false;
 
+	TimeToHitParamName = "TimeToHit";
+
 	SpringArmComp = CreateDefaultSubobject<USpringArmComponent>("SpringArmComp");
 	SpringArmComp->bUsePawnControlRotation = true;
 	SpringArmComp->SetRelativeLocation(FVector(0.0f, 0.0f, 60.0f));
@@ -66,7 +68,7 @@ void ASCharacter::OnHealthChanged(AActor* InstigatorActor, USAttributeComponent*
 	// Damage
 	if (Delta < 0.0f)
 	{
-		GetMesh()->SetScalarParameterValueOnMaterials("TimeToHit", GetWorld()->TimeSeconds);
+		GetMesh()->SetScalarParameterValueOnMaterials(TimeToHitParamName, GetWorld()->TimeSeconds);
 
 		if (!AttributeComp->IsAlive())
 		{

@@ -25,7 +25,7 @@ void ASHealthPotion::Interact_Implementation(APawn* InstigatorPawn)
 		}
 
 		UE_LOG(LogTemp, Log, TEXT("Applying health delta of %f"), HealthDelta);
-		AttributeComp->ApplyHealthChange(HealthDelta);
+		AttributeComp->ApplyHealthChange(this, HealthDelta);
 
 		DisableForCooldown();
 	}

@@ -6,6 +6,7 @@
 #include "GameFramework/Character.h"
 #include "SAICharacter.generated.h"
 
+class USAttributeComponent;
 class UPawnSensingComponent;
 
 UCLASS()
@@ -20,8 +21,19 @@ public:
 protected:
 	virtual void PostInitializeComponents() override;
 
+	UPROPERTY(VisibleAnywhere, Category = "Effect")
+	FName TimeToHitParamName;
+
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Components")
+	USAttributeComponent* AttributeComp;
+
 	UPROPERTY(VisibleAnywhere, Category = "Components")
 	UPawnSensingComponent* PawnSensingComp;
+
+	void SetTargetActor(AActor* NewTarget);
+
+	UFUNCTION()
+	void OnHealthChanged(AActor* InstigatorActor, USAttributeComponent* OwningComp, float NewHealth, float Delta);
 
 	UFUNCTION()
 	void OnPawnSeen(APawn* Pawn);
