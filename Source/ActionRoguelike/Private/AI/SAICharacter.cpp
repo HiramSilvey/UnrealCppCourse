@@ -7,6 +7,7 @@
 #include "DrawDebugHelpers.h"
 #include "Perception/PawnSensingComponent.h"
 #include "SAttributeComponent.h"
+#include "SWorldUserWidget.h"
 
 // Sets default values
 ASAICharacter::ASAICharacter()
@@ -45,6 +46,15 @@ void ASAICharacter::OnHealthChanged(AActor* InstigatorActor, USAttributeComponen
 	if (InstigatorActor != this)
 	{
 		SetTargetActor(InstigatorActor);
+	}
+
+	if (!IsValid(ActiveHealthBar))
+	{
+		if (ActiveHealthBar = CreateWidget<USWorldUserWidget>(GetWorld(), HealthBarWidgetClass); IsValid(ActiveHealthBar))
+		{
+			ActiveHealthBar->AttachedActor = this;
+			ActiveHealthBar->AddToViewport();
+		}
 	}
 
 	GetMesh()->SetScalarParameterValueOnMaterials(TimeToHitParamName, GetWorld()->TimeSeconds);
