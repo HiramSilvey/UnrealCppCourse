@@ -28,14 +28,17 @@ protected:
 	float Health;
 
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Attributes")
-	float HealthMin = 0.0f;
-
-	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Attributes")
 	float HealthMax = 100.0f;
 
 	// Stamina, Strength
 
 public:
+	UFUNCTION(BlueprintCallable)
+	float GetHealth() const;
+
+	UFUNCTION(BlueprintCallable)
+	float GetMaxHealth() const;
+
 	UFUNCTION(BlueprintCallable)
 	bool Kill(AActor* InstigatorActor);
 

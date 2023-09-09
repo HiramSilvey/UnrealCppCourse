@@ -2,6 +2,7 @@
 
 #include "AI/SAICharacter.h"
 #include "AIController.h"
+#include "BehaviorTree/BehaviorTreeTypes.h"
 #include "BehaviorTree/BlackboardComponent.h"
 #include "BrainComponent.h"
 #include "DrawDebugHelpers.h"
